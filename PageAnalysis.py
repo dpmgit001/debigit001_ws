@@ -1,60 +1,39 @@
 import tkinter as tk
-from selenium import webdriver
-from PIL import ImageGrab
+from tkinter import ttk
+import webbrowser
+from tkinter import filedialog as fd
 
+def analyse():
+  print("Analysing page...") 
 
-# Create the main window
 root = tk.Tk()
 
-# Function to load a URL when a button is clicked
-"""
-Load a URL using Selenium and display the page as an image.
+top_frame = ttk.Frame(root)
+top_frame.pack(side=tk.TOP, fill=tk.X)
 
-Args:
-    url (str): The URL to load.
+bottom_frame = ttk.Frame(root)
+bottom_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True) 
 
-Returns:
-    None
+favorite1_btn = ttk.Button(top_frame, text="Favorite 1", command=lambda: load_url("https://www.google.com"))
+favorite1_btn.pack(side=tk.LEFT)
 
-"""
-def load_url(url: str) -> None:
-    """
-    Load a URL using Selenium and display the page as an image.
+favorite2_btn = ttk.Button(top_frame, text="Favorite 2", command=lambda: load_url("https://www.youtube.com"))
+favorite2_btn.pack(side=tk.LEFT)
 
-    Args:
-        url (str): The URL to load.
+analyse_btn = ttk.Button(top_frame, text="Analyse", state=tk.DISABLED, command=analyse)
+analyse_btn.pack(side=tk.LEFT)
 
-    Returns:
-        None
-    """
-    # Use Selenium to load the URL in a headless browser
-    driver = webdriver.Chrome()  # Replace with your preferred browser
-    driver.get(url)
+browser = tk.Text(bottom_frame)
+browser.pack(fill=tk.BOTH, expand=True)
 
-    # Capture the page image
-    page_image = ImageGrab.grab()
+def load_url(url):
+  analyse_btn.config(state=tk.DISABLED)
+  
+  webbrowser.open(url)
+  browser.insert(tk.END, webbrowser.open(url).read())
+  
+  analyse_btn.config(state=tk.NORMAL)
 
 
-
-# Create the upper section with buttons
-buttons_frame = tk.Frame(root)
-favorite_urls = {
-    "Google": "https://www.google.com/",
-    "github": "https://www.github.com/",
-    # ... Add more URLs
-}
-for name, url in favorite_urls.items():
-    button = tk.Button(buttons_frame, text=name, command=lambda url=url: load_url(url))
-    button.pack()
-buttons_frame.pack()
-
-# Create a separator line
-separator = tk.Frame(root, height=2, bg="gray")
-separator.pack(fill=tk.X, pady=10)
-
-# Create the lower section (web browser)
-browser_frame = tk.Frame(root)
-# ... (Code to create a web browser-like display using Tkinter widgets)
-browser_frame.pack(fill=tk.BOTH, expand=True)
 
 root.mainloop()
